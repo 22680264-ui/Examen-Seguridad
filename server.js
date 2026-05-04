@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo');
 const path = require('path');
 const app = express();
 
+// --- TU CONEXIÓN ORIGINAL ---
 const mongoURI = "mongodb+srv://ExamenBitacoras:160224@examenbitacoras.d5hrfds.mongodb.net/?appName=ExamenBitacoras";
 
 mongoose.connect(mongoURI)
@@ -27,7 +28,6 @@ const Log = mongoose.model('Log', {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// CAMBIO CLAVE: Servir desde la raíz para que encuentre index.html en GitHub
 app.use(express.static(__dirname)); 
 
 app.use(session({
@@ -38,10 +38,20 @@ app.use(session({
     cookie: { maxAge: 1000 * 60 * 30 } 
 }));
 
-// --- BITÁCORA 1: REGISTRO (OPCIONAL) Y LOGIN ---
+// --- REGISTRO (CONECTADO A MODAL) ---
+app.post('/registro', async (req, res) => {
+    try {
+        const { username, password, rol } = req.body;
+        await new User({ username, password, rol }).save();
+        res.status(200).send("OK");
+    } catch (err) {
+        res.status(400).send("Error");
+    }
+});
+
+// --- BITÁCORAS 1 Y 2: LOGIN ---
 app.post('/login', async (req, res) => {
-    // Unificado a 'username' y 'password'
-    const { username, password } = req.body; 
+    const { username, password } = req.body;
     const u = await User.findOne({ username, password });
 
     if (u) {
@@ -62,9 +72,7 @@ app.post('/login', async (req, res) => {
 // --- BITÁCORA 3: CIERRE DE SESIÓN ---
 app.get('/logout', async (req, res) => {
     const usuarioQueSale = req.session.username || 'Anónimo';
-    // BITÁCORA 3: CIERRE DE SESIÓN
     await new Log({ tipo: 'CIERRE_SESION', usuario: usuarioQueSale, sessionID: req.sessionID }).save();
-    
     req.session.destroy();
     res.redirect('/');
 });
@@ -76,4 +84,4 @@ app.get('/api/logs', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor listo en puerto ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));

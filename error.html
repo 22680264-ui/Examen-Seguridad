@@ -2,64 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Glow Studio - Error de Acceso</title>
+    <title>Glow Studio - Error</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-       
-        body { 
-            font-family: 'Century Gothic', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('fondologin.webp') center/cover; 
-        }
-        .error-box { 
-            background: rgba(255, 255, 255, 0.85); 
-            padding: 40px; 
-            border-radius: 25px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
-            text-align: center; 
-            width: 380px; 
-            backdrop-filter: blur(10px); 
-            border: 2px solid #e74c3c;
-        }
-        i.fa-exclamation-triangle {
-            color: #e74c3c;
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        h2 { color: #5d4037; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        p { color: #333; line-height: 1.6; margin-bottom: 25px; }
-        .btn-regresar { 
-            display: inline-block;
-            width: 100%; 
-            padding: 15px; 
-            background: #b08968; 
-            color: white; 
-            border: none; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-        .btn-regresar:hover { background: #8d6e63; }
-        .log-note { font-size: 0.8rem; color: #7f5539; margin-top: 15px; font-style: italic; }
+        body { font-family: 'Century Gothic', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondologin.webp') center/cover; }
+        .error-box { background: white; padding: 40px; border-radius: 25px; text-align: center; width: 350px; border: 2px solid #e74c3c; }
+        i { color: #e74c3c; font-size: 3rem; margin-bottom: 20px; }
+        h2 { color: #5d4037; }
+        .btn-regresar { display: block; padding: 15px; background: #b08968; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
-
     <div class="error-box">
         <i class="fas fa-exclamation-triangle"></i>
         <h2>Acceso Denegado</h2>
-        <p>Las credenciales introducidas no coinciden con nuestros registros de seguridad.</p>
-        
-        <a href="Login.html" class="btn-regresar">REINTENTAR INICIO</a>
-        
-        <p class="log-note">Este intento fallido ha sido registrado en la bitácora de seguridad de MongoDB.</p>
+        <p>Usuario o contraseña incorrectos. El intento ha sido registrado en la bitácora de seguridad.</p>
+        <a href="/" class="btn-regresar">REINTENTAR</a>
     </div>
-
 </body>
 </html>

@@ -2,122 +2,232 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Glow Studio - Tienda</title>
+    <title>Glow Studio - Catálogo de Belleza</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Century Gothic', sans-serif; background: #fdf2f8; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        .nav-bar { width: 100%; background: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo-area h2 { margin: 0; color: #5d4037; letter-spacing: 1px; }
-        .user-info { display: flex; align-items: center; gap: 20px; }
-        #saludoUsuario { color: #5d4037; font-weight: bold; }
-        
-        .btn-logout { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-logout:hover { background: #c0392b; transform: scale(1.05); }
+        :root {
+            --rosa-fondo: #fdf2f8;
+            --rosa-fuerte: #fce4ec;
+            --cafe-texto: #5d4037;
+            --dorado: #b08968;
+            --blanco: #ffffff;
+        }
 
-        
-        .config-box {
-            background: #fff;
-            border: 2px dashed #b08968;
-            padding: 20px;
-            margin: 20px 40px;
-            border-radius: 15px;
+        body {
+            font-family: 'Century Gothic', 'Segoe UI', sans-serif;
+            background-color: var(--rosa-fondo);
+            margin: 0;
+            color: var(--cafe-texto);
+        }
+
+        /* BARRA DE NAVEGACIÓN */
+        .navbar {
+            background: var(--blanco);
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        /* BANNER PRINCIPAL */
+        .banner {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(rgba(93, 64, 55, 0.4), rgba(93, 64, 55, 0.4)), 
+                        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1487&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
             text-align: center;
         }
-        .session-id {
-            background: #fdf2f8;
-            padding: 10px;
-            display: block;
-            margin: 10px 0;
-            font-family: monospace;
-            color: #b08968;
-            word-break: break-all;
+
+        .banner h2 { font-size: 3rem; margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+
+        /* GRID DE PRODUCTOS */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        /* Resto de tu grid de productos... */
-        .main-container { width: 100%; padding: 30px 40px; }
-        .section-title { font-size: 1.8rem; color: #5d4037; margin-bottom: 25px; position: relative; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        .product-card { background: white; border-radius: 25px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .product-img { width: 100%; height: 220px; object-fit: cover; border-radius: 18px; }
-        .price-row { background: #fdf2f8; padding: 14px; border-radius: 18px; margin: 12px 0; }
-        .btn-agregar { width: 100%; background: #b08968; color: white; border: none; padding: 12px; border-radius: 40px; cursor: pointer; }
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--dorado);
+            margin: 10px auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--blanco);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            text-align: center;
+            border: 1px solid var(--rosa-fuerte);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .price {
+            color: var(--dorado);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .btn-add {
+            background-color: var(--cafe-texto);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 0 0 15px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover { background-color: var(--dorado); }
     </style>
 </head>
 <body>
 
-    <div class="nav-bar">
-        <div class="logo-area">
-            <h2><i class="fas fa-store"></i> GLOW STUDIO ✨</h2>
+    <nav class="navbar">
+        <h1>Glow Studio</h1>
+        <div class="nav-icons">
+            <i class="fas fa-search" style="cursor: pointer;"></i>
+            <i class="fas fa-shopping-bag" style="cursor: pointer;"></i>
+            <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
         </div>
-        <div class="user-info">
-            <span id="saludoUsuario"></span>
-            <button onclick="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+    </nav>
+
+    <header class="banner">
+        <h2>Nueva Colección</h2>
+        <p>Resalta tu belleza natural</p>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">Nuestros Productos</h2>
+        
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500" class="product-img">
+                <div class="product-info">
+                    <h3>Labial Matte "Rosé"</h3>
+                    <span class="price">$350.00 MXN</span>
+                </div>
+                <button class="btn-add">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1522338221020-fa7c00446b1d?w=500" class="product-img">
+                <div class="product-info">
+                    <h3>Paleta de Sombras Earth</h3>
+                    <span class="price">$850.00 MXN</span>
+                </div>
+                <button class="btn-add">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=500" class="product-img">
+                <div class="product-info">
+                    <h3>Base de Maquillaje Fluida</h3>
+                    <span class="price">$520.00 MXN</span>
+                </div>
+                <button class="btn-add">Agregar al Carrito</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1631214503951-375103322e4c?w=500" class="product-img">
+                <div class="product-info">
+                    <h3>Suero Revitalizante</h3>
+                    <span class="price">$420.00 MXN</span>
+                </div>
+                <button class="btn-add">Agregar al Carrito</button>
+            </div>
         </div>
-    </div>
-
-    <div class="config-box">
-        <h3>🔧 Configuración de Cuenta</h3>
-        <p>Para el examen: Este es tu identificador único de sesión en el servidor.</p>
-        <code class="session-id" id="displaySID">Obteniendo ID...</code>
-        <button onclick="copiarSID()" style="background:#b08968; color:white; border:none; padding:5px 15px; border-radius:10px; cursor:pointer;">Copiar ID</button>
-    </div>
-
-    <div class="main-container">
-        <div class="section-title">Nuestras Ofertas</div>
-        <div class="products-grid" id="ofertasGrid"></div>
     </div>
 
     <script>
-        // 1. Obtener el ID de sesión de las cookies
-        function getCookie(name) {
-            let value = `; ${document.cookie}`;
-            let parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-
-        window.onload = () => {
-            const sid = getCookie('connect.sid'); // Nombre de la cookie de sesión en Express
-            document.getElementById('displaySID').innerText = sid || "ID no detectado (asegúrate de estar en el servidor)";
-            
-            // Saludo original
-            const user = sessionStorage.getItem("usuarioActivo");
-            if(user) document.getElementById("saludoUsuario").innerText = `👋 Hola, ${user}`;
-        };
-
-        function copiarSID() {
-            const text = document.getElementById('displaySID').innerText;
-            navigator.clipboard.writeText(text);
-            alert("ID de sesión copiado. Intenta pegarlo en otro navegador.");
-        }
-
-        // 2. Cerrar sesión enviando la bitácora al servidor real
+        // Función para cerrar sesión (Registra Bitácora 3)
         async function cerrarSesion() {
-            await fetch('/logout'); // El servidor de Node manejará la bitácora de cierre
-            sessionStorage.removeItem("usuarioActivo");
-            window.location.href = "/";
+            try {
+                // Llamamos a la ruta del servidor para que guarde el log de CIERRE_SESION
+                await fetch('/logout');
+                // Redirigimos al index
+                window.location.href = "/";
+            } catch (err) {
+                console.error("Error al cerrar sesión:", err);
+                window.location.href = "/";
+            }
         }
-
-        // ... Tu lógica de render de productos (productos[]) original se mantiene igual ...
-        const productos = [
-            { marca: "L'BEL", nombre: "Bleu Glacial 100 ml", imagen: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=400", paraTi: 649.95, vendeA: 1439.70, gana: 789.75 },
-            { marca: "L'BEL", nombre: "Mithyka 50 ml", imagen: "https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?w=400", paraTi: 359.95, vendeA: 855.64, gana: 495.69 }
-        ];
-
-        const grid = document.getElementById('ofertasGrid');
-        grid.innerHTML = productos.map(prod => `
-            <div class="product-card">
-                <img class="product-img" src="${prod.imagen}">
-                <div class="product-brand">${prod.marca}</div>
-                <div class="product-title">${prod.nombre}</div>
-                <div class="price-row">
-                    <div>Ganas: <span style="color:green">$${prod.gana}</span></div>
-                </div>
-                <button class="btn-agregar">Agregar</button>
-            </div>
-        `).join('');
     </script>
 </body>
 </html>
