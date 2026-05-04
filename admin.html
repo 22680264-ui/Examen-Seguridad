@@ -112,6 +112,19 @@
             font-weight: bold;
             color: var(--dorado-suave);
         }
+
+        /* NUEVOS ESTILOS PARA BOTONES DE EXPORTACIÓN */
+        .btn-export {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+            font-size: 0.8rem;
+        }
+        .btn-export:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -119,9 +132,15 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-shield-alt"></i> Panel de Seguridad Glow Studio</h1>
-            <button class="btn-logout" onclick="cerrarSesion()">
-                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-            </button>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="exportarPorTipo('ACCESO_CORRECTO')" class="btn-export" style="background: #27ae60;">CSV Correctos</button>
+                <button onclick="exportarPorTipo('ACCESO_FALLIDO')" class="btn-export" style="background: #e67e22;">CSV Fallidos</button>
+                <button onclick="exportarPorTipo('CIERRE_SESION')" class="btn-export" style="background: #2980b9;">CSV Cierres</button>
+                
+                <button class="btn-logout" onclick="cerrarSesion()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
         </div>
 
         <div class="table-container">
@@ -178,6 +197,36 @@
         async function cerrarSesion() {
             await fetch('/logout');
             window.location.href = "/";
+        }
+
+        // SE AGREGA ESTA FUNCIÓN PARA EXPORTAR LOS 3 ARCHIVOS
+        function exportarPorTipo(tipoFiltro) {
+            const table = document.querySelector("table");
+            const rows = Array.from(table.querySelectorAll("tr"));
+            let csv = [];
+            
+            // Encabezados
+            const headers = Array.from(table.querySelectorAll("th")).map(th => `"${th.innerText}"`);
+            csv.push(headers.join(","));
+
+            // Filas filtradas
+            rows.slice(1).forEach(row => {
+                const cols = row.querySelectorAll("td");
+                if (cols.length > 0 && cols.innerText.trim() === tipoFiltro) {
+                    const rowData = Array.from(cols).map(col => `"${col.innerText.replace(/"/g, '""').trim()}"`);
+                    csv.push(rowData.join(","));
+                }
+            });
+
+            if (csv.length <= 1) return alert("No hay datos para: " + tipoFiltro);
+
+            const blob = new Blob(["\uFEFF" + csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `bitacora_${tipoFiltro.toLowerCase()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Cargar al inicio y refrescar cada 5 segundos
