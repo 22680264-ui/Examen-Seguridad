@@ -2,22 +2,51 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Glow Studio - Error</title>
+    <title>Glow Studio - Acceso Denegado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Century Gothic', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondologin.webp') center/cover; }
-        .error-box { background: white; padding: 40px; border-radius: 25px; text-align: center; width: 350px; border: 2px solid #e74c3c; }
-        i { color: #e74c3c; font-size: 3rem; margin-bottom: 20px; }
-        h2 { color: #5d4037; }
-        .btn-regresar { display: block; padding: 15px; background: #b08968; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; margin-top: 20px; }
+        body { 
+            font-family: 'Century Gothic', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('fondologin.webp') center/cover; 
+        }
+        .error-box { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 25px; 
+            text-align: center; 
+            width: 350px; 
+            border: 2px solid #e74c3c;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        i { color: #e74c3c; font-size: 3.5rem; margin-bottom: 20px; }
+        h2 { color: #5d4037; margin-bottom: 10px; }
+        p { color: #666; line-height: 1.5; }
+        .btn-regresar { 
+            display: block; 
+            padding: 15px; 
+            background: #b08968; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+        .btn-regresar:hover { background: #5d4037; }
     </style>
 </head>
 <body>
     <div class="error-box">
-        <i class="fas fa-exclamation-triangle"></i>
+        <i class="fas fa-exclamation-circle"></i>
         <h2>Acceso Denegado</h2>
-        <p>Usuario o contraseña incorrectos. El intento ha sido registrado en la bitácora de seguridad.</p>
-        <a href="/" class="btn-regresar">REINTENTAR</a>
+        <p>Usuario o contraseña incorrectos.</p>
+        <p style="font-size: 0.8rem; color: #999;">Este intento ha sido registrado en nuestra bitácora de seguridad.</p>
+        <a href="/" class="btn-regresar">Intentar de nuevo</a>
     </div>
 </body>
 </html>

@@ -35,83 +35,49 @@
 
         .navbar h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        .nav-icons {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
         .btn-logout {
-            background-color: #e74c3c;
+            background: #e74c3c;
             color: white;
             border: none;
-            padding: 8px 18px;
-            border-radius: 8px;
+            padding: 10px 25px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
         }
 
-        /* BANNER PRINCIPAL */
-        .banner {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(rgba(93, 64, 55, 0.4), rgba(93, 64, 55, 0.4)), 
-                        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1487&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
+        .btn-logout:hover {
+            background: #c0392b;
+            transform: scale(1.05);
         }
 
-        .banner h2 { font-size: 3rem; margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-
-        /* GRID DE PRODUCTOS */
-        .container {
+        /* CUADRÍCULA DE PRODUCTOS */
+        .main-content {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: var(--dorado);
-            margin: 10px auto;
-        }
-
-        .products-grid {
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 30px;
         }
 
         .product-card {
             background: var(--blanco);
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             transition: transform 0.3s;
-            text-align: center;
             border: 1px solid var(--rosa-fuerte);
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card:hover {
@@ -120,111 +86,109 @@
 
         .product-img {
             width: 100%;
-            height: 250px;
+            height: 300px;
             object-fit: cover;
         }
 
         .product-info {
             padding: 20px;
+            text-align: center;
+            flex-grow: 1;
         }
 
         .product-info h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
+            margin: 10px 0;
+            font-size: 1.2rem;
         }
 
         .price {
-            color: var(--dorado);
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
             display: block;
+            color: var(--dorado);
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
 
         .btn-add {
-            background-color: var(--cafe-texto);
+            background: var(--cafe-texto);
             color: white;
             border: none;
             width: 100%;
-            padding: 12px;
-            border-radius: 0 0 15px 15px;
+            padding: 15px;
             cursor: pointer;
             font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.3s;
+            transition: background 0.3s;
         }
 
-        .btn-add:hover { background-color: var(--dorado); }
+        .btn-add:hover {
+            background: var(--dorado);
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <h1>Glow Studio</h1>
-        <div class="nav-icons">
-            <i class="fas fa-search" style="cursor: pointer;"></i>
-            <i class="fas fa-shopping-bag" style="cursor: pointer;"></i>
-            <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <span id="saludo">¡Bienvenida!</span>
+            <button class="btn-logout" onclick="cerrarSesion()">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </button>
         </div>
     </nav>
 
-    <header class="banner">
-        <h2>Nueva Colección</h2>
-        <p>Resalta tu belleza natural</p>
-    </header>
-
-    <div class="container">
-        <h2 class="section-title">Nuestros Productos</h2>
+    <div class="main-content">
+        <h2 style="text-align: center; margin-bottom: 40px; color: var(--cafe-texto);">Nuestra Colección</h2>
         
-        <div class="products-grid">
+        <div class="product-grid">
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500" class="product-img">
                 <div class="product-info">
-                    <h3>Labial Matte "Rosé"</h3>
+                    <h3>Labial Matte "Velvet Rose"</h3>
                     <span class="price">$350.00 MXN</span>
+                    <button class="btn-add">Añadir al carrito</button>
                 </div>
-                <button class="btn-add">Agregar al Carrito</button>
             </div>
 
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1522338221020-fa7c00446b1d?w=500" class="product-img">
                 <div class="product-info">
-                    <h3>Paleta de Sombras Earth</h3>
+                    <h3>Paleta de Sombras "Earth"</h3>
                     <span class="price">$850.00 MXN</span>
+                    <button class="btn-add">Añadir al carrito</button>
                 </div>
-                <button class="btn-add">Agregar al Carrito</button>
             </div>
 
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=500" class="product-img">
                 <div class="product-info">
-                    <h3>Base de Maquillaje Fluida</h3>
+                    <h3>Base Fluida Larga Duración</h3>
                     <span class="price">$520.00 MXN</span>
+                    <button class="btn-add">Añadir al carrito</button>
                 </div>
-                <button class="btn-add">Agregar al Carrito</button>
             </div>
 
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1631214503951-375103322e4c?w=500" class="product-img">
                 <div class="product-info">
-                    <h3>Suero Revitalizante</h3>
+                    <h3>Suero Revitalizante Facial</h3>
                     <span class="price">$420.00 MXN</span>
+                    <button class="btn-add">Añadir al carrito</button>
                 </div>
-                <button class="btn-add">Agregar al Carrito</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Función para cerrar sesión (Registra Bitácora 3)
+        // CONEXIÓN CON EL SERVIDOR PARA BITÁCORA DE CIERRE
         async function cerrarSesion() {
             try {
-                // Llamamos a la ruta del servidor para que guarde el log de CIERRE_SESION
+                // Esto llama a la ruta /logout en server.js que registra la bitácora 3
                 await fetch('/logout');
-                // Redirigimos al index
+                // Redirigir al inicio después de registrar la salida
                 window.location.href = "/";
-            } catch (err) {
-                console.error("Error al cerrar sesión:", err);
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
                 window.location.href = "/";
             }
         }

@@ -5,7 +5,6 @@
     <title>Glow Studio - Panel Administrativo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* ESTILOS BASADOS EN TU DISEÑO DE MAQUILLAJE */
         :root {
             --rosa-claro: #fdf2f8;
             --rosa-medio: #fce4ec;
@@ -35,7 +34,7 @@
         }
 
         .header {
-            background-color: var(--blanco);
+            background: var(--blanco);
             padding: 25px 40px;
             display: flex;
             justify-content: space-between;
@@ -43,74 +42,71 @@
             border-bottom: 2px solid var(--rosa-medio);
         }
 
-        .header h2 {
-            color: var(--cafe-glow);
+        .header h1 {
             margin: 0;
+            color: var(--cafe-glow);
+            font-size: 1.5rem;
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .btn-logout {
-            background-color: #e74c3c;
+            background: #e74c3c;
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 10px;
+            padding: 12px 25px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
         }
 
         .btn-logout:hover {
-            background-color: #c0392b;
+            background: #c0392b;
             transform: scale(1.05);
         }
 
-        /* TABLA ESTILO PROFESIONAL */
+        /* TABLA DE BITÁCORAS */
         .table-container {
-            padding: 20px 40px;
+            padding: 30px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         th {
-            background-color: var(--cafe-glow);
-            color: white;
-            text-align: left;
+            background-color: var(--rosa-medio);
+            color: var(--cafe-glow);
             padding: 15px;
-            font-weight: 500;
+            text-align: left;
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
         }
 
         td {
             padding: 15px;
-            border-bottom: 1px solid var(--rosa-medio);
+            border-bottom: 1px solid #eee;
             color: #444;
-            font-size: 0.95rem;
         }
 
         tr:hover {
             background-color: #fff9fb;
         }
 
-        /* ETIQUETAS DE BITÁCORA */
+        /* BADGES DE ESTADO */
         .badge {
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
         }
 
-        .acceso-correcto { background-color: #d4edda; color: #155724; }
-        .acceso-fallido { background-color: #f8d7da; color: #721c24; }
-        .cierre-sesion { background-color: #fff3cd; color: #856404; }
+        .acceso-correcto { background: #d4edda; color: #155724; }
+        .acceso-fallido { background: #f8d7da; color: #721c24; }
+        .cierre-sesion { background: #fff3cd; color: #856404; }
 
         .user-cell {
             font-weight: bold;
@@ -122,38 +118,41 @@
 
     <div class="container">
         <div class="header">
-            <h2><i class="fas fa-clipboard-list"></i> Bitácora de Seguridad - Glow Studio</h2>
-            <button onclick="cerrarSesion()" class="btn-logout">
+            <h1><i class="fas fa-shield-alt"></i> Panel de Seguridad Glow Studio</h1>
+            <button class="btn-logout" onclick="cerrarSesion()">
                 <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </button>
         </div>
 
         <div class="table-container">
+            <h2 style="color: var(--cafe-glow); margin-bottom: 5px;">Bitácora de Eventos</h2>
+            <p style="color: #888; font-size: 0.9rem; margin-bottom: 25px;">Monitoreo en tiempo real desde MongoDB Atlas</p>
+            
             <table>
                 <thead>
                     <tr>
-                        <th><i class="far fa-calendar-alt"></i> Fecha y Hora</th>
-                        <th><i class="far fa-user"></i> Usuario</th>
-                        <th><i class="fas fa-fingerprint"></i> Evento / Acción</th>
-                        <th><i class="fas fa-key"></i> ID de Sesión</th>
+                        <th>Fecha y Hora</th>
+                        <th>Usuario</th>
+                        <th>Evento / Tipo</th>
+                        <th>ID de Sesión (Seguridad)</th>
                     </tr>
                 </thead>
-                <tbody id="tabla-logs">
+                <tbody id="logs-body">
                     </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Función para cargar los datos reales del servidor
-        async function cargarBitacora() {
+        // Función para cargar las bitácoras desde el servidor Node.js
+        async function cargarBitacoras() {
             try {
-                const response = await fetch('/api/logs');
+                const response = await fetch('/api/logs'); // Ruta que creamos en server.js
                 const logs = await response.json();
-                const tbody = document.getElementById('tabla-logs');
+                const tbody = document.getElementById('logs-body');
 
                 tbody.innerHTML = logs.map(log => {
-                    // Asignar clase de color según el tipo de bitácora
+                    // Determinar el estilo según el tipo de log
                     let claseBadge = "";
                     if (log.tipo === "ACCESO_CORRECTO") claseBadge = "acceso-correcto";
                     else if (log.tipo === "ACCESO_FALLIDO") claseBadge = "acceso-fallido";
@@ -171,19 +170,19 @@
                     `;
                 }).join('');
             } catch (error) {
-                console.error("Error al cargar la bitácora:", error);
+                console.error("Error al cargar bitácoras:", error);
             }
         }
 
-        // Función para cerrar sesión (registra la bitácora 3)
+        // Función para salir (Bitácora 3)
         async function cerrarSesion() {
             await fetch('/logout');
             window.location.href = "/";
         }
 
-        // Cargar datos al iniciar y actualizar cada 5 segundos
-        window.onload = cargarBitacora;
-        setInterval(cargarBitacora, 5000);
+        // Cargar al inicio y refrescar cada 5 segundos
+        window.onload = cargarBitacoras;
+        setInterval(cargarBitacoras, 5000);
     </script>
 </body>
 </html>
