@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Administrativo - Glow Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #fdf2f8; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .container { width: 95%; max-width: 1400px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; padding-bottom: 20px; }
+        .header { padding: 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fce4ec; }
+        .btn-logout { background: #e74c3c; color: white; border: none; padding: 12px 25px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-logout:hover { background: #c0392b; transform: scale(1.05); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        thead { background: #2c3e50; color: white; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        .user-admin { color: #c5a059; font-weight: bold; }
+        
+        .tabs { display: flex; background: #f8f0f3; padding-left: 20px; }
+        .tab-btn { background: transparent; border: none; padding: 15px 25px; cursor: pointer; font-weight: bold; color: #7f5539; }
+        .tab-btn.active { color: #b08968; border-bottom: 3px solid #b08968; background: white; }
+        .tab-content { display: none; padding: 25px; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2 style="color: #5d4037; margin: 0;"><i class="fas fa-store"></i> Panel de Control Glow Studio</h2>
+        <button onclick="cerrarSesionServidor()" class="btn-logout"><i class="fas fa-power-off"></i> Cerrar Sesión</button>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="bitacora"><i class="fas fa-history"></i> Bitácora Real (MongoDB)</button>
+        <button class="tab-btn" data-tab="otros"><i class="fas fa-info-circle"></i> Otros Módulos</button>
+    </div>
+
+    <div id="bitacora" class="tab-content active">
+        <div class="bitacora-container">
+            <h3 style="color: #2c3e50;"><i class="fas fa-history"></i> Eventos en Tiempo Real</h3>
+            <table id="tabla-bitacora">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Evento / Acción</th>
+                        <th>ID de Sesión</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-datos">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="otros" class="tab-content">
+        <h3>Información del Sistema</h3>
+        <p>Los módulos de ventas y productos están en mantenimiento para asegurar la estabilidad del examen.</p>
+    </div>
+</div>
+
+<script>
+    // CARGAR BITÁCORA - Usando la ruta exacta de tu server.js
+    async function cargarBitacoraReal() {
+        try {
+            // Intentamos con la ruta /api/logs que es la estándar en tu servidor
+            const response = await fetch('/api/logs');
+            const logs = await response.json();
+            
+            const tbody = document.getElementById('tabla-datos');
+            if (logs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">No hay logs registrados aún.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${new Date(log.fecha).toLocaleString()}</td>
+                    <td class="${log.usuario === 'admin' ? 'user-admin' : ''}">
+                        ${log.usuario} ${log.usuario === 'admin' ? '<i class="fas fa-star" style="color:#f1c40f"></i>' : ''}
+                    </td>
+                    <td><strong>${log.tipo}</strong></td>
+                    <td style="font-family:monospace; font-size:0.8em; color:#888;">
+                        ${log.sessionID || 'Sesión Activa'}
+                    </td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error("Error al obtener bitácoras:", error);
+        }
+    }
+
+    async function cerrarSesionServidor() {
+        await fetch('/logout');
+        window.location.href = "/";
+    }
+
+    // Lógica de pestañas simplificada
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        });
+    });
+
+    // Iniciar carga
+    window.onload = () => {
+        cargarBitacoraReal();
+        setInterval(cargarBitacoraReal, 5000); 
+    };
+</script>
+</body>
+</html>
