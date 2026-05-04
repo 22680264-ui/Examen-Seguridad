@@ -113,18 +113,18 @@
             color: var(--dorado-suave);
         }
 
-        /* NUEVOS ESTILOS PARA BOTONES DE EXPORTACIÓN */
-        .btn-export {
+        /* NUEVOS ESTILOS PARA LOS BOTONES DE EXPORTACIÓN (Basados en tu imagen) */
+        .btn-csv {
             border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
             color: white;
             transition: 0.3s;
-            font-size: 0.8rem;
+            margin-left: 5px;
         }
-        .btn-export:hover { transform: scale(1.05); }
+        .btn-csv:hover { opacity: 0.9; transform: scale(1.02); }
     </style>
 </head>
 <body>
@@ -132,12 +132,12 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-shield-alt"></i> Panel de Seguridad Glow Studio</h1>
-            <div style="display: flex; gap: 8px;">
-                <button onclick="exportarPorTipo('ACCESO_CORRECTO')" class="btn-export" style="background: #27ae60;">CSV Correctos</button>
-                <button onclick="exportarPorTipo('ACCESO_FALLIDO')" class="btn-export" style="background: #e67e22;">CSV Fallidos</button>
-                <button onclick="exportarPorTipo('CIERRE_SESION')" class="btn-export" style="background: #2980b9;">CSV Cierres</button>
+            <div style="display: flex; align-items: center;">
+                <button class="btn-csv" style="background: #27ae60;" onclick="exportarCSVPorTipo('ACCESO_CORRECTO')">CSV Correctos</button>
+                <button class="btn-csv" style="background: #e67e22;" onclick="exportarCSVPorTipo('ACCESO_FALLIDO')">CSV Fallidos</button>
+                <button class="btn-csv" style="background: #2980b9;" onclick="exportarCSVPorTipo('CIERRE_SESION')">CSV Cierres</button>
                 
-                <button class="btn-logout" onclick="cerrarSesion()">
+                <button class="btn-logout" style="margin-left: 15px;" onclick="cerrarSesion()">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </button>
             </div>
@@ -163,15 +163,14 @@
     </div>
 
     <script>
-        // Función para cargar las bitácoras desde el servidor Node.js
+        // Función original para cargar las bitácoras
         async function cargarBitacoras() {
             try {
-                const response = await fetch('/api/logs'); // Ruta que creamos en server.js
+                const response = await fetch('/api/logs'); 
                 const logs = await response.json();
                 const tbody = document.getElementById('logs-body');
 
                 tbody.innerHTML = logs.map(log => {
-                    // Determinar el estilo según el tipo de log
                     let claseBadge = "";
                     if (log.tipo === "ACCESO_CORRECTO") claseBadge = "acceso-correcto";
                     else if (log.tipo === "ACCESO_FALLIDO") claseBadge = "acceso-fallido";
@@ -193,43 +192,51 @@
             }
         }
 
-        // Función para salir (Bitácora 3)
+        // Función original para salir
         async function cerrarSesion() {
             await fetch('/logout');
             window.location.href = "/";
         }
 
-        // SE AGREGA ESTA FUNCIÓN PARA EXPORTAR LOS 3 ARCHIVOS
-        function exportarPorTipo(tipoFiltro) {
+        // NUEVA FUNCIÓN PARA EXPORTAR LOS 3 ARCHIVOS INDEPENDIENTES
+        function exportarCSVPorTipo(tipoFiltro) {
             const table = document.querySelector("table");
             const rows = Array.from(table.querySelectorAll("tr"));
-            let csv = [];
+            let csvData = [];
             
-            // Encabezados
-            const headers = Array.from(table.querySelectorAll("th")).map(th => `"${th.innerText}"`);
-            csv.push(headers.join(","));
+            // Agregar encabezados
+            csvData.push("Fecha y Hora,Usuario,Evento / Tipo,ID de Sesion");
 
-            // Filas filtradas
+            // Filtrar filas por el tipo de evento
+            // Saltamos la primera fila (encabezado de la tabla)
             rows.slice(1).forEach(row => {
                 const cols = row.querySelectorAll("td");
-                if (cols.length > 0 && cols.innerText.trim() === tipoFiltro) {
-                    const rowData = Array.from(cols).map(col => `"${col.innerText.replace(/"/g, '""').trim()}"`);
-                    csv.push(rowData.join(","));
+                if (cols.length > 0) {
+                    const tipoEventoTexto = cols.innerText.trim();
+                    if (tipoEventoTexto === tipoFiltro) {
+                        const fila = Array.from(cols).map(col => `"${col.innerText.trim()}"`);
+                        csvData.push(fila.join(","));
+                    }
                 }
             });
 
-            if (csv.length <= 1) return alert("No hay datos para: " + tipoFiltro);
+            if (csvData.length <= 1) {
+                alert("No hay registros cargados actualmente para: " + tipoFiltro);
+                return;
+            }
 
-            const blob = new Blob(["\uFEFF" + csv.join("\n")], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `bitacora_${tipoFiltro.toLowerCase()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Crear el archivo y descargar
+            const csvBlob = new Blob(["\uFEFF" + csvData.join("\n")], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(csvBlob);
+            const a = document.createElement("a");
+            a.setAttribute("href", url);
+            a.setAttribute("download", `bitacora_${tipoFiltro.toLowerCase()}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
-        // Cargar al inicio y refrescar cada 5 segundos
+        // Tus llamados originales
         window.onload = cargarBitacoras;
         setInterval(cargarBitacoras, 5000);
     </script>
